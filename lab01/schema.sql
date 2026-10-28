@@ -1,29 +1,19 @@
--- ============================================================
 -- Бычков Даниил Дмитриевич
--- Группа: ВПИШИ_СВОЮ_ГРУППУ
+-- Группа: ИНБО-21-23
 -- Практическая работа № 1
 -- Развёртывание PostgreSQL и загрузка Olist
--- ============================================================
 
 
--- ============================================================
--- 1. СОЗДАНИЕ СХЕМ
--- Выполняется до загрузки CSV
--- ============================================================
+
 
 CREATE SCHEMA IF NOT EXISTS olist;
 CREATE SCHEMA IF NOT EXISTS lab;
 
 
--- ============================================================
--- 2. СОЗДАНИЕ ИСХОДНЫХ ТАБЛИЦ OLIST
--- Выполняется до загрузки CSV
--- ============================================================
 
 
--- ------------------------------------------------------------
+
 -- Клиенты
--- ------------------------------------------------------------
 
 CREATE TABLE olist.customers (
     customer_id text NOT NULL,
@@ -34,9 +24,7 @@ CREATE TABLE olist.customers (
 );
 
 
--- ------------------------------------------------------------
--- Географические данные
--- ------------------------------------------------------------
+
 
 CREATE TABLE olist.geolocation (
     geolocation_zip_code_prefix integer,
@@ -47,9 +35,7 @@ CREATE TABLE olist.geolocation (
 );
 
 
--- ------------------------------------------------------------
--- Заказы
--- ------------------------------------------------------------
+
 
 CREATE TABLE olist.orders (
     order_id text NOT NULL,
@@ -63,9 +49,6 @@ CREATE TABLE olist.orders (
 );
 
 
--- ------------------------------------------------------------
--- Позиции заказов
--- ------------------------------------------------------------
 
 CREATE TABLE olist.order_items (
     order_id text NOT NULL,
@@ -78,9 +61,7 @@ CREATE TABLE olist.order_items (
 );
 
 
--- ------------------------------------------------------------
--- Платежи
--- ------------------------------------------------------------
+
 
 CREATE TABLE olist.order_payments (
     order_id text NOT NULL,
@@ -91,9 +72,7 @@ CREATE TABLE olist.order_payments (
 );
 
 
--- ------------------------------------------------------------
--- Отзывы
--- ------------------------------------------------------------
+
 
 CREATE TABLE olist.order_reviews (
     review_id text NOT NULL,
@@ -106,9 +85,7 @@ CREATE TABLE olist.order_reviews (
 );
 
 
--- ------------------------------------------------------------
--- Товары
--- ------------------------------------------------------------
+
 
 CREATE TABLE olist.products (
     product_id text NOT NULL,
@@ -123,9 +100,6 @@ CREATE TABLE olist.products (
 );
 
 
--- ------------------------------------------------------------
--- Продавцы
--- ------------------------------------------------------------
 
 CREATE TABLE olist.sellers (
     seller_id text NOT NULL,
@@ -135,9 +109,7 @@ CREATE TABLE olist.sellers (
 );
 
 
--- ------------------------------------------------------------
--- Перевод названий категорий товаров
--- ------------------------------------------------------------
+
 
 CREATE TABLE olist.product_category_name_translation (
     product_category_name text NOT NULL,
@@ -146,10 +118,7 @@ CREATE TABLE olist.product_category_name_translation (
 
 
 
--- ============================================================
--- 3. ПЕРВИЧНЫЕ КЛЮЧИ
--- Выполняется после загрузки CSV
--- ============================================================
+
 
 ALTER TABLE olist.customers
 ADD CONSTRAINT pk_customers
@@ -191,12 +160,9 @@ ADD CONSTRAINT pk_order_reviews
 PRIMARY KEY (review_id, order_id);
 
 
--- ============================================================
 -- 4. ВНЕШНИЕ КЛЮЧИ
--- ============================================================
 
 
--- Каждый заказ должен ссылаться на существующего клиента
 
 ALTER TABLE olist.orders
 ADD CONSTRAINT fk_orders_customer
@@ -204,8 +170,7 @@ FOREIGN KEY (customer_id)
 REFERENCES olist.customers(customer_id);
 
 
--- Каждая позиция заказа должна ссылаться
--- на существующий заказ
+
 
 ALTER TABLE olist.order_items
 ADD CONSTRAINT fk_items_order
@@ -213,8 +178,7 @@ FOREIGN KEY (order_id)
 REFERENCES olist.orders(order_id);
 
 
--- Каждая позиция заказа должна ссылаться
--- на существующий товар
+
 
 ALTER TABLE olist.order_items
 ADD CONSTRAINT fk_items_product
@@ -222,8 +186,6 @@ FOREIGN KEY (product_id)
 REFERENCES olist.products(product_id);
 
 
--- Каждая позиция заказа должна ссылаться
--- на существующего продавца
 
 ALTER TABLE olist.order_items
 ADD CONSTRAINT fk_items_seller
@@ -231,8 +193,6 @@ FOREIGN KEY (seller_id)
 REFERENCES olist.sellers(seller_id);
 
 
--- Каждый платёж должен ссылаться
--- на существующий заказ
 
 ALTER TABLE olist.order_payments
 ADD CONSTRAINT fk_payments_order
@@ -240,11 +200,9 @@ FOREIGN KEY (order_id)
 REFERENCES olist.orders(order_id);
 
 
--- Каждый отзыв должен ссылаться
--- на существующий заказ
+
 
 ALTER TABLE olist.order_reviews
 ADD CONSTRAINT fk_reviews_order
 FOREIGN KEY (order_id)
-REFERENCES olist.orders(order_id);SELECT COUNT(*)
-FROM olist.order_reviews;
+REFERENCES olist.orders(order_id);
